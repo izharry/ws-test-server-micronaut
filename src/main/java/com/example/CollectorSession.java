@@ -19,9 +19,9 @@ public class CollectorSession {
     public Mono<String> close() {
         System.out.println("Closing session");
         return Mono.from(session.send("bye"))
-                .doOnError(s -> System.out.println("OnError: %s" + s))
+                .doOnError(s -> System.out.println("OnError: " + s))
                 .doOnSuccess(s -> {
-                    System.out.println("OnSuccess: %s" + s);
+                    System.out.println("OnSuccess: " + s);
                     session.close(CloseReason.NORMAL);
                 })
                 .doFinally(s -> System.out.println("Finally"));

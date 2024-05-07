@@ -2,7 +2,7 @@ package com.example;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.event.ApplicationEventListener;
-import io.micronaut.runtime.event.ApplicationShutdownEvent;
+import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.websocket.CloseReason;
 import io.micronaut.websocket.WebSocketSession;
 import io.micronaut.websocket.annotation.OnClose;
@@ -18,7 +18,7 @@ import java.util.HashSet;
 
 @ServerWebSocket("/ws")
 @RequiredArgsConstructor
-public class WebsocketServer implements ApplicationEventListener<ApplicationShutdownEvent> {
+public class WebsocketServer implements ApplicationEventListener<ShutdownEvent> {
 
     public static final String SESSION = "session";
     private final ApplicationContext context;
@@ -51,7 +51,7 @@ public class WebsocketServer implements ApplicationEventListener<ApplicationShut
     }
 
     @Override
-    public void onApplicationEvent(ApplicationShutdownEvent event) {
+    public void onApplicationEvent(ShutdownEvent event) {
         System.out.println("Websocket server is shutting down...");
         System.out.println("Number of collector sessions to close: " + sessions.size());
         Flux.fromIterable(sessions)
@@ -64,7 +64,7 @@ public class WebsocketServer implements ApplicationEventListener<ApplicationShut
     }
 
     @Override
-    public boolean supports(ApplicationShutdownEvent event) {
+    public boolean supports(ShutdownEvent event) {
         return ApplicationEventListener.super.supports(event);
     }
 }
